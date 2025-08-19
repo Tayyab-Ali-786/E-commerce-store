@@ -1,7 +1,9 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider} from 'react-router-dom'
 import './App.css'
 import Home from './Pages/Home'
 import SellersCenter from './components/Topbar_components/SellersCenter';
+import ProductDetail from "./components/ProductDetail";
+
 
 let router = createBrowserRouter([
   {
@@ -16,9 +18,13 @@ let router = createBrowserRouter([
     path: "/seller",
     element: (
       <div>
-        <SellersCenter/>
+        <SellersCenter />
       </div>
     ),
+  },
+  {
+    path: "/product/:id",
+    element: <ProductDetail />,
   },
 ]);
 

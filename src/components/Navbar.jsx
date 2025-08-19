@@ -55,7 +55,7 @@ export default function Navbar() {
   };
 
   return (
-    <div className="bg-gradient-to-r from-indigo-600 to-indigo-800 shadow-md">
+    <div className="bg-gradient-to-r from-violet-600 to-violet-800 shadow-md">
       <nav className="container mx-auto px-4 py-3">
         <ul className="flex justify-end text-sm font-medium text-white gap-8 items-center">
           <li>
