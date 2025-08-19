@@ -9,6 +9,7 @@ export default function Home() {
 
   async function get_data(params) {
     let d_data = await fetch(url);
+    console.log("loading");
     let data = await d_data.json();
 
     function handledata() {
