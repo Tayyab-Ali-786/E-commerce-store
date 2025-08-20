@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { BiAtom } from "react-icons/bi";
 
 export default function Navbar() {
-  const url = "https://www.google.com/";
+  const url = "https://store-cartify.netlify.app/";
   const qrUrl = `https://quickchart.io/qr?text=${url}&size=500`;
 
   const showQrToast = () => {

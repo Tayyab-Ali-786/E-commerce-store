@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "./Navbar";
+import { CiStar } from "react-icons/ci";
 
 export default function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   useEffect(() => {
     async function fetchProduct() {
-        console.log("loading");
+      console.log("loading");
       let res = await fetch(`https://dummyjson.com/products/${id}`);
       let data = await res.json();
       setProduct(data);
@@ -21,94 +22,114 @@ export default function ProductDetail() {
   return (
     <div className="bg-gray-100 min-h-screen">
       <Navbar />
-
-      {/* Product Section */}
-      <div className="max-w-7xl mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-10 bg-white shadow rounded-lg mt-6">
-        {/* Left - Product Image */}
-        <div className="flex justify-center items-center bg-gray-50 rounded-lg p-6">
-          <img
-            src={product.thumbnail}
-            alt={product.title}
-            className="w-full max-h-[500px] object-contain"
-          />
+      <div className="bg-white flex">
+        <div className="bg-gray-200 w-md flex justify-center m-10">
+          <img src={product.thumbnail} alt="random image" />
         </div>
-
-        {/* Right - Product Details */}
-        <div className="flex flex-col space-y-4">
-          <h1 className="text-4xl font-bold">{product.title}</h1>
-
-          <p className="text-gray-600 text-lg leading-relaxed">
-            {product.description}
-          </p>
-
-          {/* Price Section */}
-          <div className="text-3xl font-bold text-orange-600">
-            ${product.price}
-            <span className="text-base text-gray-400 ml-2">
-              ({product.discountPercentage}% OFF)
-            </span>
-          </div>
-
-          {/* Rating */}
-          <div className="flex items-center space-x-2">
-            <span className="text-yellow-500 text-xl">⭐</span>
-            <span className="font-medium">{product.rating}</span>
-          </div>
-
-          {/* Stock info */}
-          <p className="text-sm text-gray-500">
-            {product.stock > 0
-              ? `${product.stock} items left in stock`
-              : "Out of Stock"}
-          </p>
-
-          {/* Buttons */}
-          <div className="flex space-x-4 pt-6">
-            <button className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg shadow font-medium text-lg">
-              Add to Cart
-            </button>
-            <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg shadow font-medium text-lg">
-              Buy Now
-            </button>
+        <div className="p-9">
+          <div className="space-y-4">
+            <h1 className="text-2xl font-bold">{product.title}</h1>
+            <p>{product.description}</p>
+            <div className="flex gap-4">
+              <div className="text-2xl font-extrabold text-red-500">
+                {product.price}$
+              </div>
+              <p className="font-bold text-gray-400 text-sm pt-1.5">
+                {" "}
+                ({product.discountPercentage})%OFF
+              </p>
+            </div>
+            <div className="flex">
+              <CiStar size={26} />
+              <div className="pt-0.5">{product.rating}</div>
+            </div>
+            <div>
+              <div className="flex justify-evenly">
+                <button className="bg-orange-500 p-5 border border-transparent rounded-lg text-white font-medium hover:bg-orange-600 transition-colors duration-200">
+                  Add to Cart
+                </button>
+                <button className="bg-blue-500 p-5 border border-transparent rounded-lg text-white font-medium hover:bg-blue-700 transition-colors duration-200">
+                  Buy Now
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Specs Section */}
-      <div className="max-w-7xl mx-auto bg-white shadow rounded-lg mt-6 p-6">
-        <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-          Specifications
-        </h2>
-        <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-600">
-          <li>Brand: {product.brand || "Generic"}</li>
-          <li>Category: {product.category}</li>
-          <li>Stock: {product.stock}</li>
-          <li>Discount: {product.discountPercentage}%</li>
-          <li>Rating: {product.rating}</li>
-          <li>Warranty: 1 Year Brand Warranty</li>
-        </ul>
+      <div className="bg-white m-8">
+        <div className="text-2xl font-bold">
+          <h1>Specifications:</h1>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full table-auto border-collapse bg-white shadow-sm rounded-lg">
+            <thead>
+              <tr className="bg-gray-100 text-gray-800 text-sm font-semibold">
+                <th className="px-6 py-4 text-left border-b border-gray-200">
+                  Brand
+                </th>
+                <th className="px-6 py-4 text-left border-b border-gray-200">
+                  Stock
+                </th>
+                <th className="px-6 py-4 text-left border-b border-gray-200">
+                  Rating
+                </th>
+                <th className="px-6 py-4 text-left border-b border-gray-200">
+                  Category
+                </th>
+                <th className="px-6 py-4 text-left border-b border-gray-200">
+                  Discount
+                </th>
+                <th className="px-6 py-4 text-left border-b border-gray-200">
+                  Warranty
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="hover:bg-gray-50 transition-colors duration-200">
+                <td className="px-6 py-4 border-b border-gray-200 text-gray-700">
+                  {product.brand}
+                </td>
+                <td className="px-6 py-4 border-b border-gray-200 text-gray-700">
+                  {product.stock}
+                </td>
+                <td className="px-6 py-4 border-b border-gray-200 text-gray-700">
+                  {product.rating}
+                </td>
+                <td className="px-6 py-4 border-b border-gray-200 text-gray-700">
+                  {product.category}
+                </td>
+                <td className="px-6 py-4 border-b border-gray-200 text-gray-700">
+                  {product.discountPercentage}%
+                </td>
+                <td className="px-6 py-4 border-b border-gray-200 text-gray-700">
+                  {product.warrantyInformation}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      {/* Reviews Section */}
-      <div className="max-w-7xl mx-auto bg-white shadow rounded-lg mt-6 p-6">
+      <div className="max-w-7xl mx-auto bg-white shadow-sm rounded-lg mt-6 p-6">
         <h2 className="text-2xl font-semibold mb-6 text-gray-800">
           Customer Reviews
         </h2>
         {product.reviews && product.reviews.length > 0 ? (
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {product.reviews.map((review, index) => (
               <div
                 key={index}
-                className="p-4 bg-gray-50 rounded-lg border border-gray-200"
+                className="p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
               >
-                <div className="flex items-center space-x-2 mb-2">
-                  <span className="text-yellow-500">⭐</span>
-                  <span className="font-medium text-gray-800">
+                <div className="flex items-center space-x-2 mb-3">
+                  <span className="text-yellow-500 text-lg">⭐</span>
+                  <span className="font-semibold text-gray-800">
                     {review.rating}
                   </span>
                 </div>
-                <p className="text-gray-700">{review.comment}</p>
-                <p className="text-gray-400 text-xs mt-2">
+                <p className="text-gray-700 text-sm mb-2">{review.comment}</p>
+                <p className="text-gray-500 text-xs">
                   By {review.reviewerName}
                 </p>
               </div>
@@ -119,7 +140,6 @@ export default function ProductDetail() {
         )}
       </div>
 
-      {/* Related Products Section */}
       <div className="max-w-7xl mx-auto bg-white shadow rounded-lg mt-6 p-6 mb-10">
         <h2 className="text-2xl font-semibold mb-4 text-gray-800">
           Related Products
