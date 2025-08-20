@@ -44,11 +44,11 @@ export default function ProductDetail() {
               <div className="pt-0.5">{product.rating}</div>
             </div>
             <div>
-              <div className="flex justify-evenly">
-                <button className="bg-orange-500 p-5 border border-transparent rounded-lg text-white font-medium hover:bg-orange-600 transition-colors duration-200">
+              <div className="flex justify-evenly gap-4">
+                <button className="bg-orange-500 text-white font-medium px-8 py-3 rounded-lg shadow-sm hover:bg-orange-600 hover:shadow-md hover:scale-105 transition-all duration-200 w-40">
                   Add to Cart
                 </button>
-                <button className="bg-blue-500 p-5 border border-transparent rounded-lg text-white font-medium hover:bg-blue-700 transition-colors duration-200">
+                <button className="bg-orange-600 text-white font-medium px-8 py-3 rounded-lg shadow-sm hover:bg-orange-700 hover:shadow-md hover:scale-105 transition-all duration-200 w-40">
                   Buy Now
                 </button>
               </div>
@@ -56,7 +56,6 @@ export default function ProductDetail() {
           </div>
         </div>
       </div>
-
       <div className="bg-white m-8">
         <div className="text-2xl font-bold">
           <h1>Specifications:</h1>
@@ -111,7 +110,7 @@ export default function ProductDetail() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto bg-white shadow-sm rounded-lg mt-6 p-6">
+      <div className="bg-white m-8 p-8 shadow-sm rounded-lg">
         <h2 className="text-2xl font-semibold mb-6 text-gray-800">
           Customer Reviews
         </h2>
@@ -140,7 +139,7 @@ export default function ProductDetail() {
         )}
       </div>
 
-      <div className="max-w-7xl mx-auto bg-white shadow rounded-lg mt-6 p-6 mb-10">
+      <div className="bg-white m-8 p-8 shadow-sm rounded-lg">
         <h2 className="text-2xl font-semibold mb-4 text-gray-800">
           Related Products
         </h2>
