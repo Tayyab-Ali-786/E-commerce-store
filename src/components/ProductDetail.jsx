@@ -1,54 +1,210 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "./Navbar";
-import { CiStar } from "react-icons/ci";
+import { CiNoWaitingSign, CiStar } from "react-icons/ci";
+import toast from "react-hot-toast";
+import { useForm } from "react-hook-form";
+
+// New component for the "Buy Now" form, keeping the logic separate and clean
+const BuyNowForm = ({ onClose }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => {
+    // Log the form data for demonstration
+    console.log("Form data submitted:", data);
+    toast("Order submitted successfully!");
+    onClose(); // Close the modal after submission
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold">Checkout Information</h2>
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-800 text-2xl font-semibold"
+          >
+            &times;
+          </button>
+        </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div>
+            <label
+              htmlFor="name"
+              className="block text-gray-700 font-semibold mb-1"
+            >
+              Full Name
+            </label>
+            <input
+              id="name"
+              type="text"
+              {...register("fullName", { required: true })}
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            {errors.fullName && (
+              <span className="text-red-500 text-sm">
+                This field is required
+              </span>
+            )}
+          </div>
+
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-gray-700 font-semibold mb-1"
+            >
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              {...register("email", { required: true })}
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            {errors.email && (
+              <span className="text-red-500 text-sm">
+                This field is required
+              </span>
+            )}
+          </div>
+
+          <div>
+            <label
+              htmlFor="address"
+              className="block text-gray-700 font-semibold mb-1"
+            >
+              Shipping Address
+            </label>
+            <textarea
+              id="address"
+              {...register("address", { required: true })}
+              rows="3"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+            {errors.address && (
+              <span className="text-red-500 text-sm">
+                This field is required
+              </span>
+            )}
+          </div>
+
+          <div className="flex justify-end space-x-4">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-100 transition-colors duration-200"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-6 py-2 bg-indigo-600 text-white font-medium rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200"
+            >
+              Submit Order
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
 
 export default function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false); // New state to show/hide the form
+
+  function AddToCart() {
+    let existing = JSON.parse(localStorage.getItem("userdata")) || [];
+
+    const newProduct = {
+      picture: product.thumbnail,
+      name: product.title,
+      price: product.price,
+    };
+
+    existing.push(newProduct);
+
+    localStorage.setItem("userdata", JSON.stringify(existing));
+
+    toast(
+      "Your item has been added to the cart. Please visit the cart to confirm your order."
+    );
+  }
+
+  // The Buy_Now function now simply sets the state to show the form
+  function Buy_Now() {
+    setShowForm(true);
+  }
+
   useEffect(() => {
     async function fetchProduct() {
-      console.log("loading");
-      let res = await fetch(`https://dummyjson.com/products/${id}`);
-      let data = await res.json();
-      setProduct(data);
+      try {
+        setLoading(true);
+        console.log("loading");
+        let res = await fetch(`https://dummyjson.com/products/${id}`);
+        let data = await res.json();
+        setProduct(data);
+      } catch (error) {
+        console.error("Failed to fetch product:", error);
+      } finally {
+        setLoading(false);
+      }
     }
     fetchProduct();
   }, [id]);
 
-  if (!product)
+  if (loading || !product) {
     return <p className="text-center mt-10 text-gray-500">Loading...</p>;
+  }
 
   return (
     <div className="bg-gray-100 min-h-screen">
       <Navbar />
-      <div className="bg-white flex">
-        <div className="bg-gray-200 w-md flex justify-center m-10">
-          <img src={product.thumbnail} alt="random image" />
+      <div className="bg-white flex flex-col md:flex-row m-8 p-4 md:p-8 rounded-lg shadow-md">
+        <div className="md:w-1/2 flex justify-center p-4">
+          <img
+            src={product.thumbnail}
+            alt={product.title}
+            className="max-w-full h-auto rounded-lg shadow-lg"
+          />
         </div>
-        <div className="p-9">
+        <div className="p-4 md:p-9 md:w-1/2">
           <div className="space-y-4">
-            <h1 className="text-2xl font-bold">{product.title}</h1>
-            <p>{product.description}</p>
-            <div className="flex gap-4">
-              <div className="text-2xl font-extrabold text-red-500">
-                {product.price}$
+            <h1 className="text-3xl font-bold text-gray-800">
+              {product.title}
+            </h1>
+            <p className="text-gray-600">{product.description}</p>
+            <div className="flex gap-4 items-center">
+              <div className="text-3xl font-extrabold text-red-600">
+                ${product.price}
               </div>
-              <p className="font-bold text-gray-400 text-sm pt-1.5">
-                {" "}
-                ({product.discountPercentage})%OFF
+              <p className="font-bold text-gray-500 text-sm pt-1">
+                ({product.discountPercentage})% OFF
               </p>
             </div>
-            <div className="flex">
-              <CiStar size={26} />
-              <div className="pt-0.5">{product.rating}</div>
+            <div className="flex items-center">
+              <CiStar size={26} className="text-yellow-500" />
+              <div className="pl-1 text-gray-700">{product.rating}</div>
             </div>
             <div>
-              <div className="flex justify-evenly gap-4">
-                <button className="bg-orange-500 text-white font-medium px-8 py-3 rounded-lg shadow-sm hover:bg-orange-600 hover:shadow-md hover:scale-105 transition-all duration-200 w-40">
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button
+                  className="bg-orange-500 text-white font-medium px-8 py-3 rounded-lg shadow-sm hover:bg-orange-600 hover:shadow-md transition-all duration-200 w-full sm:w-40"
+                  onClick={AddToCart}
+                >
                   Add to Cart
                 </button>
-                <button className="bg-orange-600 text-white font-medium px-8 py-3 rounded-lg shadow-sm hover:bg-orange-700 hover:shadow-md hover:scale-105 transition-all duration-200 w-40">
+                <button
+                  className="bg-orange-600 text-white font-medium px-8 py-3 rounded-lg shadow-sm hover:bg-orange-700 hover:shadow-md transition-all duration-200 w-full sm:w-40"
+                  onClick={Buy_Now}
+                >
                   Buy Now
                 </button>
               </div>
@@ -56,10 +212,10 @@ export default function ProductDetail() {
           </div>
         </div>
       </div>
-      <div className="bg-white m-8">
-        <div className="text-2xl font-bold">
-          <h1>Specifications:</h1>
-        </div>
+      <div className="bg-white m-8 p-8 shadow-sm rounded-lg">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">
+          Specifications
+        </h2>
         <div className="overflow-x-auto">
           <table className="w-full table-auto border-collapse bg-white shadow-sm rounded-lg">
             <thead>
@@ -109,7 +265,6 @@ export default function ProductDetail() {
           </table>
         </div>
       </div>
-
       <div className="bg-white m-8 p-8 shadow-sm rounded-lg">
         <h2 className="text-2xl font-semibold mb-6 text-gray-800">
           Customer Reviews
@@ -138,13 +293,11 @@ export default function ProductDetail() {
           <p className="text-gray-500 text-sm">No reviews available.</p>
         )}
       </div>
-
       <div className="bg-white m-8 p-8 shadow-sm rounded-lg">
         <h2 className="text-2xl font-semibold mb-4 text-gray-800">
           Related Products
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {/* Placeholder cards */}
           {[1, 2, 3, 4].map((i) => (
             <div
               key={i}
@@ -157,6 +310,10 @@ export default function ProductDetail() {
           ))}
         </div>
       </div>
+      {/* Conditionally render the form modal */}
+      {showForm && <BuyNowForm onClose={() => setShowForm(false)} />}
     </div>
   );
 }
+
+

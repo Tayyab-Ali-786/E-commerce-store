@@ -75,6 +75,14 @@ export default function Navbar() {
             </NavLink>
           </li>
           <li>
+            <NavLink
+              to="cart"
+              className="transition-transform duration-200 hover:scale-105 hover:text-teal-300"
+            >
+              Cart
+            </NavLink>
+          </li>
+          <li>
             <button
               onClick={helpandsupporttoast}
               className="transition-transform duration-200 hover:scale-105 hover:text-teal-300"

@@ -3,6 +3,7 @@ import './App.css'
 import Home from './Pages/Home'
 import SellersCenter from './components/Topbar_components/SellersCenter';
 import ProductDetail from "./components/ProductDetail";
+import Cart from './components/Topbar_components/Cart';
 
 
 let router = createBrowserRouter([
@@ -19,6 +20,14 @@ let router = createBrowserRouter([
     element: (
       <div>
         <SellersCenter />
+      </div>
+    ),
+  },
+  {
+    path: "/cart",
+    element: (
+      <div>
+        <Cart />
       </div>
     ),
   },
