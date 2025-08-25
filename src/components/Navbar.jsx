@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import toast from "react-hot-toast";
 import { BiAtom } from "react-icons/bi";
 
 export default function Navbar() {
+
   const url = "https://store-cartify.netlify.app/";
   const qrUrl = `https://quickchart.io/qr?text=${url}&size=500`;
 
@@ -79,7 +80,7 @@ export default function Navbar() {
               to="cart"
               className="transition-transform duration-200 hover:scale-105 hover:text-teal-300"
             >
-              Cart
+              Visit Cart
             </NavLink>
           </li>
           <li>

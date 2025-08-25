@@ -5,7 +5,6 @@ import { CiNoWaitingSign, CiStar } from "react-icons/ci";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 
-// New component for the "Buy Now" form, keeping the logic separate and clean
 const BuyNowForm = ({ onClose }) => {
   const {
     register,
@@ -14,7 +13,6 @@ const BuyNowForm = ({ onClose }) => {
   } = useForm();
 
   const onSubmit = (data) => {
-    // Log the form data for demonstration
     console.log("Form data submitted:", data);
     toast("Order submitted successfully!");
     onClose(); // Close the modal after submission
@@ -115,6 +113,10 @@ const BuyNowForm = ({ onClose }) => {
 };
 
 export default function ProductDetail() {
+  const [filteredArray, setfilteredArray] = useState([]);
+  function set_Data() {
+
+  }
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
